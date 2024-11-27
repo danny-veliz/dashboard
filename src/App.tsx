@@ -1,34 +1,54 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import IndicatorWeather from './components/IndicatorWeather'
+import Grid from '@mui/material/Grid2' 
 import './App.css'
+import TableWeather from './components/TableWeather';
+import ControlWeather from './components/ControlWeather';
+import LineChartWeather from './components/LineChartWeather';
 
 function App() {
-  const [count, setCount] = useState(0)
+  //const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Grid container spacing={5}>
+                <Grid>
+                 <IndicatorWeather title={'Indicator 1'} subtitle={'Unidad 1'} value={"1.23"} /> 
+             </Grid>
+
+             <Grid >
+                 <IndicatorWeather title={'Indicator 2'} subtitle={'Unidad 2'} value={"3.12"} />
+             </Grid>
+                
+             <Grid >
+                 <IndicatorWeather title={'Indicator 3'} subtitle={'Unidad 3'} value={"2.31"} />
+             </Grid>
+                
+             <Grid>
+                 <IndicatorWeather title={'Indicator 4'} subtitle={'Unidad 4'} value={"3.21"} />
+             </Grid>
+      
+             {/* Tabla */}
+             <Grid>
+                    
+                 {/* Grid Anidado */}
+                 <Grid container spacing={2}>
+                     <Grid size={{ xs: 12, xl: 3 }}>
+                         <ControlWeather/>
+                     </Grid>
+                     <Grid size={{ xs: 12, xl: 9 }}>
+                         <TableWeather/>
+                     </Grid>
+                 </Grid>
+
+             </Grid>
+             <Grid>
+                 <LineChartWeather/>
+             </Grid>
+
+         </Grid>
+
   )
 }
 
