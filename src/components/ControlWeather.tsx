@@ -5,7 +5,10 @@ import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+ {/* Hooks */ }
+import { useState, useRef } from 'react';
+
     
  export default function ControlWeather() {
 
@@ -18,9 +21,30 @@ import Select from '@mui/material/Select';
 
      {/* Arreglo de elementos JSX */}
      let options = items.map( (item, key) => <MenuItem key={key} value={key}>{item["name"]}</MenuItem> )
-        
+      
+    {/* Variable de estado y función de actualización */}
+    let [selected, setSelected] = useState(-1)
+    
+    {/* Manejador de eventos */}
+       const handleChange = (event: SelectChangeEvent) => {
+			
+        let idx = parseInt(event.target.value)
+        //alert( idx );
+        setSelected( idx );
+
+        {/* Modificación de la referencia descriptionRef */}
+        if (descriptionRef.current !== null) {
+        descriptionRef.current.innerHTML = (idx >= 0) ? items[idx]["description"] : ""
+    }
+
+    };
+
+    {/* Constante de referencia a un elemento HTML */ }
+    const descriptionRef = useRef<HTMLDivElement>(null);
+
      {/* JSX */}
      return (
+        
          <Paper
              sx={{
                  p: 2,
@@ -29,10 +53,12 @@ import Select from '@mui/material/Select';
              }}
          >
 
-             <Typography mb={2} component="h3" variant="h6" color="primary">
-                 Variables Meteorológicas
-             </Typography>
-
+            {/*<Typography mb={2} component="h3" variant="h6" color="primary">
+             {
+                 (selected >= 0)?items[selected]["description"]:""
+             }
+             </Typography>*/}
+             <Typography ref={descriptionRef} mt={2} component="p" color="text.secondary" />
              <Box sx={{ minWidth: 120 }}>
                     
                  <FormControl fullWidth>
@@ -42,6 +68,7 @@ import Select from '@mui/material/Select';
                          id="simple-select"
                          label="Variables"
                          defaultValue='-1'
+                         onChange={handleChange}
                      >
                          <MenuItem key="-1" value="-1" disabled>Seleccione una variable</MenuItem>
 
@@ -54,7 +81,6 @@ import Select from '@mui/material/Select';
 
 
          </Paper>
-
-
+         
      )
  }
