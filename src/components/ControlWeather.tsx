@@ -1,86 +1,72 @@
-
+import  { useState, useRef } from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
- {/* Hooks */ }
-import { useState, useRef } from 'react';
+import Select from '@mui/material/Select';
+import { SelectChangeEvent } from '@mui/material/Select';
 
-    
- export default function ControlWeather() {
-
-     {/* Arreglo de objetos */}
-     let items = [
-         {"name":"Precipitación", "description":"Cantidad de agua que cae sobre una superficie en un período específico."}, 
-         {"name": "Humedad", "description":"Cantidad de vapor de agua presente en el aire, generalmente expresada como un porcentaje."}, 
-         {"name":"Nubosidad", "description":"Grado de cobertura del cielo por nubes, afectando la visibilidad y la cantidad de luz solar recibida."}
-     ]
-
-     {/* Arreglo de elementos JSX */}
-     let options = items.map( (item, key) => <MenuItem key={key} value={key}>{item["name"]}</MenuItem> )
-      
-    {/* Variable de estado y función de actualización */}
-    let [selected, setSelected] = useState(-1)
-    
-    {/* Manejador de eventos */}
-       const handleChange = (event: SelectChangeEvent) => {
-			
-        let idx = parseInt(event.target.value)
-        //alert( idx );
-        setSelected( idx );
-
-        {/* Modificación de la referencia descriptionRef */}
-        if (descriptionRef.current !== null) {
-        descriptionRef.current.innerHTML = (idx >= 0) ? items[idx]["description"] : ""
-    }
-
-    };
-
-    {/* Constante de referencia a un elemento HTML */ }
+export default function ControlWeather() {
+    // Hooks para estado y referencia
+    const [, setSelected] = useState(-1);
     const descriptionRef = useRef<HTMLDivElement>(null);
 
-     {/* JSX */}
-     return (
-        
-         <Paper
-             sx={{
-                 p: 2,
-                 display: 'flex',
-                 flexDirection: 'column'
-             }}
-         >
+    // Datos para las opciones del selector
+    const items = [
+        { name: 'Precipitación', description: 'Cantidad de agua que cae sobre una superficie.' },
+        { name: 'Humedad', description: 'Cantidad de vapor de agua en el aire.' },
+        { name: 'Nubosidad', description: 'Grado de cobertura del cielo por nubes.' },
+    ];
 
-            {/*<Typography mb={2} component="h3" variant="h6" color="primary">
-             {
-                 (selected >= 0)?items[selected]["description"]:""
-             }
-             </Typography>*/}
-             <Typography ref={descriptionRef} mt={2} component="p" color="text.secondary" />
-             <Box sx={{ minWidth: 120 }}>
-                    
-                 <FormControl fullWidth>
-                     <InputLabel id="simple-select-label">Variables</InputLabel>
-                     <Select
-                         labelId="simple-select-label"
-                         id="simple-select"
-                         label="Variables"
-                         defaultValue='-1'
-                         onChange={handleChange}
-                     >
-                         <MenuItem key="-1" value="-1" disabled>Seleccione una variable</MenuItem>
+    // Manejador del evento de cambio
+    const handleChange = (event: SelectChangeEvent) => {
+        let idx = parseInt(event.target.value);
+        setSelected(idx);
 
-                         {options}
+        // Actualiza el contenido de la referencia
+        if (descriptionRef.current !== null) {
+            descriptionRef.current.innerHTML = idx >= 0 ? items[idx]["description"] : "";
+        }
+    };
 
-                     </Select>
-                 </FormControl>
+    return (
+        <Paper
+            sx={{
+                p: 2,
+                display: 'flex',
+                flexDirection: 'column',
+            }}
+        >
+            <Typography mb={2} component="h3" variant="h6" color="primary">
+                Variables Meteorológicas
+            </Typography>
 
-             </Box>
+            <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                    <InputLabel id="simple-select-label">Variables</InputLabel>
+                    <Select
+                        labelId="simple-select-label"
+                        id="simple-select"
+                        label="Variables"
+                        defaultValue="-1"
+                        onChange={handleChange}
+                    >
+                        <MenuItem key="-1" value="-1" disabled>
+                            Seleccione una variable
+                        </MenuItem>
+                        {items.map((item, key) => (
+                            <MenuItem key={key} value={key}>
+                                {item.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Box>
 
-
-         </Paper>
-         
-     )
- }
+            {/* Descripción actualizada dinámicamente */}
+            <Typography ref={descriptionRef} mt={2} component="p" color="text.secondary" />
+        </Paper>
+    );
+}
